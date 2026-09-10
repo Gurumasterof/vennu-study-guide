@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vaa Macha Vettiya Irukala! 🎓 - Ultimate Student AI Assistant</title>
+  <meta name="description" content="Ultra-modularized AI-powered student assistant app for University of Madras, Anna University, VTU, JNTU & Exam Question Banks with PDF downloads.">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- html2pdf for Client-side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <div id="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-header">
+        <div class="brand-logo">🚀</div>
+        <div class="brand-info">
+          <h1>Vaa Macha Vettiya Irukala!</h1>
+          <span>Student AI Companion (UNOM Special)</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-label">AI Study Hub</div>
+        <a href="#assistant" class="nav-item active" onclick="switchTab('assistant', event)">
+          <i data-lucide="bot"></i> Machan AI Planner
+        </a>
+        <a href="#youtube" class="nav-item" onclick="switchTab('youtube', event)">
+          <i data-lucide="youtube"></i> YouTube Syllabus Matcher
+        </a>
+        <a href="#exam" class="nav-item" onclick="switchTab('exam', event)">
+          <i data-lucide="graduation-cap"></i> University Question Bank
+        </a>
+        <a href="#notes" class="nav-item" onclick="switchTab('notes', event)">
+          <i data-lucide="file-text"></i> Syllabus Notes Generator
+        </a>
+        <a href="#assignment" class="nav-item" onclick="switchTab('assignment', event)">
+          <i data-lucide="pen-tool"></i> Assignment Copilot
+        </a>
+
+        <div class="nav-section-label">Productivity Tools</div>
+        <a href="#timetable" class="nav-item" onclick="switchTab('timetable', event)">
+          <i data-lucide="calendar"></i> Daily Timetable
+        </a>
+        <a href="#tasks" class="nav-item" onclick="switchTab('tasks', event)">
+          <i data-lucide="check-square"></i> Deadlines & Tasks
+        </a>
+        <a href="#gpa" class="nav-item" onclick="switchTab('gpa', event)">
+          <i data-lucide="calculator"></i> GPA Calculator
+        </a>
+        <a href="#timer" class="nav-item" onclick="switchTab('timer', event)">
+          <i data-lucide="timer"></i> Focus Pomodoro Timer
+        </a>
+      </nav>
+
+      <div class="share-badge-btn" onclick="shareWithFriends()">
+        <p>📱 Share with College Friends</p>
+        <span>Copy app link & whatsapp invite</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Bar Header -->
+      <header class="top-header">
+        <div class="header-title-box">
+          <h2 id="current-tab-title">Machan AI Assistant & Daily Planner</h2>
+          <p id="current-tab-subtitle">College study-ah stress illama, machan style-la manage pannungaa!</p>
+        </div>
+
+        <div class="header-controls">
+          <div class="college-selector-pill">
+            <i data-lucide="building"></i>
+            <select id="universitySelect" onchange="onUniversityChange()">
+              <option value="madras_univ" selected>University of Madras (UNOM)</option>
+              <option value="anna_univ">Anna University</option>
+              <option value="vtu">VTU University</option>
+              <option value="jntu">JNTU University</option>
+              <option value="mumbai_univ">Mumbai University</option>
+              <option value="autonomous">Autonomous / Deemed Univ</option>
+              <option value="custom">Custom University</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB 1: Machan AI Assistant & Daily Routine Planner -->
+      <section id="tab-assistant" class="tab-content active">
+        <div class="grid-2">
+          <div class="glass-card">
+            <div class="card-title">
+              <i data-lucide="bot" style="color: var(--primary);"></i> Machan AI Interactive Assistant
+            </div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+              Tell Machan your college hours, sleep timings, and today's goals. Machan will build a custom study routine!
+            </p>
+
+            <div class="chat-container">
+              <div class="chat-messages" id="chatMessages">
+                <div class="message-bubble assistant">
+                  Vannakam Macha! 👋 Madras University & college exam stress-ah? <br><br>
+                  Sollu, iniku unaku college hours enna? Kitathata evlo time padika venum? Na unaku exact timetable pottu tharen!
+                </div>
+              </div>
+              <div class="chat-input-bar">
+                <input type="text" id="chatInput" class="form-control" placeholder="e.g., Madras Univ B.Sc CS, College 8:30 to 2:00 PM, need 2 hrs study..." onkeypress="handleChatKeyPress(event)">
+                <button class="btn btn-primary" onclick="sendChatMessage()"><i data-lucide="send"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-title">
+              <i data-lucide="sparkles" style="color: var(--accent-cyan);"></i> Today's Smart Daily Routine
+            </div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+              AI generated schedule based on your available free hours.
+            </p>
+
+            <div id="aiScheduleOutput">
+              <div class="stat-box" style="margin-bottom: 12px;">
+                <div class="stat-icon" style="background: rgba(99,102,241,0.2); color: #a5b4fc;">⏰</div>
+                <div class="stat-info">
+                  <h3>8:30 AM - 2:00 PM</h3>
+                  <p>Madras University Lectures & Practical Labs</p>
+                </div>
+              </div>
+              <div class="stat-box" style="margin-bottom: 12px;">
+                <div class="stat-icon" style="background: rgba(16,185,129,0.2); color: #6ee7b7;">☕</div>
+                <div class="stat-info">
+                  <h3>2:00 PM - 4:00 PM</h3>
+                  <p>Lunch, Rest & Evening Break</p>
+                </div>
+              </div>
+              <div class="stat-box" style="margin-bottom: 12px;">
+                <div class="stat-icon" style="background: rgba(245,158,11,0.2); color: #fde047;">🎯</div>
+                <div class="stat-info">
+                  <h3>5:00 PM - 6:30 PM</h3>
+                  <p>Deep Study: UNOM C++ & Data Structures 15-Mark Questions</p>
+                </div>
+              </div>
+              <div class="stat-box" style="margin-bottom: 12px;">
+                <div class="stat-icon" style="background: rgba(236,72,153,0.2); color: #f472b6;">📖</div>
+                <div class="stat-info">
+                  <h3>8:00 PM - 9:00 PM</h3>
+                  <p>Quick Revision & Past Year Exam Paper Review</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-emerald" style="width: 100%; margin-top: 16px;" onclick="syncScheduleToTimetable()">
+              <i data-lucide="plus-circle"></i> Save Schedule to Timetable
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: YouTube Syllabus Matcher & Watch Hour Calculator -->
+      <section id="tab-youtube" class="tab-content">
+        <div class="glass-card">
+          <div class="card-title">
+            <i data-lucide="youtube" style="color: #ef4444;"></i> YouTube Syllabus Matcher & Watch Hour Calculator
+          </div>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+            Paste any YouTube Playlist URL or lecture search term. We'll analyze total duration, syllabus matching %, and exact watch hours needed!
+          </p>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>YouTube Playlist / Video URL or Topic</label>
+              <input type="text" id="ytUrlInput" class="form-control" placeholder="e.g. https://www.youtube.com/playlist?list=..." value="https://youtube.com/playlist?list=Madras_Univ_Data_Structures_C++">
+            </div>
+
+            <div class="form-group">
+              <label>Select Subject / Syllabus Unit</label>
+              <select id="ytSubjectSelect" class="form-control">
+                <option value="all">Entire Syllabus (All Units)</option>
+                <option value="unit1">Unit I: C++ OOPs Concepts</option>
+                <option value="unit2">Unit II: Stacks & Queues</option>
+                <option value="unit3">Unit III: Linked Lists & Trees</option>
+                <option value="unit4">Unit IV: Sorting & Searching</option>
+                <option value="unit5">Unit V: Graph & Hashing</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" onclick="analyzeYoutubePlaylist()">
+            <i data-lucide="play-circle"></i> Calculate Watch Hours & Match Syllabus
+          </button>
+        </div>
+
+        <div id="ytAnalysisResults" class="grid-3" style="margin-top: 24px;">
+          <div class="stat-box">
+            <div class="stat-icon" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">⏱️</div>
+            <div class="stat-info">
+              <h3 id="ytTotalWatchHours">4.5 Hours</h3>
+              <p>Total Playlist Duration</p>
+            </div>
+          </div>
+
+          <div class="stat-box">
+            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7;">🎯</div>
+            <div class="stat-info">
+              <h3 id="ytSyllabusMatch">94% Match</h3>
+              <p>UNOM Syllabus Coverage</p>
+            </div>
+          </div>
+
+          <div class="stat-box">
+            <div class="stat-icon" style="background: rgba(6, 182, 212, 0.2); color: #67e8f9;">⚡</div>
+            <div class="stat-info">
+              <h3 id="ytSpeed2x">2.25 Hours</h3>
+              <p>Watch Time at 1.75x Speed</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="margin-top: 24px;">
+          <div class="card-title">
+            <i data-lucide="list-video" style="color: var(--accent-cyan);"></i> Filtered Videos Matching Your Syllabus
+          </div>
+          <div id="ytMatchingVideosList" style="margin-top: 16px;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 3: University Exam Question Bank -->
+      <section id="tab-exam" class="tab-content">
+        <div class="glass-card">
+          <div class="card-title">
+            <i data-lucide="graduation-cap" style="color: var(--accent-amber);"></i> University Exam Repeated & Important Questions Engine
+          </div>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+            Extract 2-Mark, 15-Mark Important Questions and Past Exam Repeated Questions with step-by-step Model Answers for Madras University!
+          </p>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label>University</label>
+              <input type="text" id="examUnivDisplay" class="form-control" value="University of Madras (UNOM)" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Department / Branch</label>
+              <select id="examDeptSelect" class="form-control" onchange="onDeptChange()"></select>
+            </div>
+
+            <div class="form-group">
+              <label>Subject</label>
+              <select id="examSubjectSelect" class="form-control" onchange="loadSubjectSyllabus()"></select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Syllabus Text / Topics (Auto-loaded or paste custom)</label>
+            <textarea id="examSyllabusText" class="form-control" placeholder="Paste subject syllabus modules here..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="generateQuestionBank()">
+              <i data-lucide="sparkles"></i> Generate Important & Repeated Questions
+            </button>
+            <button class="btn btn-emerald" onclick="downloadQuestionsPdf('important')">
+              <i data-lucide="download"></i> Download Important Q&A PDF
+            </button>
+            <button class="btn btn-outline" style="border-color: var(--accent-amber); color: #fde047;" onclick="downloadQuestionsPdf('repeated')">
+              <i data-lucide="download"></i> Download Repeated Q&A PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 24px;">
+          <div>
+            <div class="card-title" style="margin-bottom: 16px;">
+              <span class="badge badge-purple">PDF Ready</span> 🔥 High Priority Important Questions
+            </div>
+            <div id="importantQuestionsList"></div>
+          </div>
+
+          <div>
+            <div class="card-title" style="margin-bottom: 16px;">
+              <span class="badge badge-amber">Past Paper Analysis</span> 🔁 UNOM Exam Repeated Questions
+            </div>
+            <div id="repeatedQuestionsList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: Syllabus to Notes Generator -->
+      <section id="tab-notes" class="tab-content">
+        <div class="glass-card">
+          <div class="card-title">
+            <i data-lucide="file-text" style="color: var(--accent-emerald);"></i> Syllabus to Comprehensive Notes Generator
+          </div>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+            Paste any syllabus topic, and Machan AI will write crisp study notes, key formulas, and a 5-minute exam revision summary!
+          </p>
+
+          <div class="form-group">
+            <label>Enter Topic or Paste Syllabus Unit</label>
+            <textarea id="notesInputTopic" class="form-control" placeholder="e.g. Quick Sort Algorithm Derivation, Time Complexity, Binary Search Tree Operations..."></textarea>
+          </div>
+
+          <button class="btn btn-emerald" onclick="generateSyllabusNotes()">
+            <i data-lucide="book-open"></i> Generate Study Notes & Revision Sheet
+          </button>
+        </div>
+
+        <div id="notesOutputContainer" class="glass-card" style="display: none; margin-top: 24px;">
+          <div class="card-header-flex">
+            <div class="card-title" id="notesTitle">Study Notes</div>
+            <button class="btn btn-outline" onclick="downloadNotesPdf()"><i data-lucide="download"></i> Download Notes PDF</button>
+          </div>
+          <div id="notesBodyContent" style="line-height: 1.7; color: var(--text-main);"></div>
+        </div>
+      </section>
+
+      <!-- TAB 5: Assignment Copilot -->
+      <section id="tab-assignment" class="tab-content">
+        <div class="glass-card">
+          <div class="card-title">
+            <i data-lucide="pen-tool" style="color: var(--accent-pink);"></i> Assignment Copilot & Essay Solver
+          </div>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+            Input your assignment prompt or question. Machan AI prepares a clean, structured solution with introduction, derivations, code, and references.
+          </p>
+
+          <div class="form-group">
+            <label>Assignment Title / Question Prompt</label>
+            <input type="text" id="assignmentTitleInput" class="form-control" placeholder="e.g. Write C++ program for Stack ADT using pointers and explain Push/Pop operations.">
+          </div>
+
+          <div class="form-group">
+            <label>Additional Requirements / Guidelines (Optional)</label>
+            <textarea id="assignmentGuideInput" class="form-control" placeholder="e.g. Include C++ code, diagram, and complexity analysis..."></textarea>
+          </div>
+
+          <button class="btn btn-primary" onclick="generateAssignmentSolution()">
+            <i data-lucide="wand2"></i> Generate Assignment Solution
+          </button>
+        </div>
+
+        <div id="assignmentOutputContainer" class="glass-card" style="display: none; margin-top: 24px;">
+          <div class="card-header-flex">
+            <div class="card-title">Completed Assignment Solution</div>
+            <button class="btn btn-emerald" onclick="downloadAssignmentPdf()"><i data-lucide="download"></i> Export Assignment PDF</button>
+          </div>
+          <div id="assignmentBodyContent" style="line-height: 1.7; color: var(--text-main);"></div>
+        </div>
+      </section>
+
+      <!-- TAB 6: Daily Timetable -->
+      <section id="tab-timetable" class="tab-content">
+        <div class="glass-card">
+          <div class="card-header-flex">
+            <div class="card-title"><i data-lucide="calendar"></i> Weekly & Daily Class Timetable</div>
+            <button class="btn btn-primary" onclick="addNewScheduleRow()"><i data-lucide="plus"></i> Add Class / Study Slot</button>
+          </div>
+          
+          <table style="width: 100%; border-collapse: collapse; margin-top: 16px;" id="timetableTable">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-muted); font-size: 13px;">
+                <th style="padding: 12px;">Time Slot</th>
+                <th style="padding: 12px;">Subject / Activity</th>
+                <th style="padding: 12px;">Type</th>
+                <th style="padding: 12px;">Venue / Room</th>
+                <th style="padding: 12px;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="timetableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 7: Task & Deadline Tracker -->
+      <section id="tab-tasks" class="tab-content">
+        <div class="glass-card">
+          <div class="card-header-flex">
+            <div class="card-title"><i data-lucide="check-square"></i> Deadlines & Assignment Tracker</div>
+            <button class="btn btn-emerald" onclick="addNewTask()"><i data-lucide="plus"></i> Add Task</button>
+          </div>
+          <div id="tasksListContainer" style="margin-top: 16px;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 8: GPA / CGPA Calculator -->
+      <section id="tab-gpa" class="tab-content">
+        <div class="glass-card">
+          <div class="card-title"><i data-lucide="calculator"></i> Semester GPA / CGPA Calculator</div>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Calculate your semester grade points and total CGPA accurately.</p>
+
+          <div id="gpaRowsContainer"></div>
+
+          <div style="display: flex; gap: 12px; margin-top: 20px; align-items: center;">
+            <button class="btn btn-outline" onclick="addGpaCourseRow()"><i data-lucide="plus"></i> Add Subject</button>
+            <button class="btn btn-primary" onclick="calculateGpa()"><i data-lucide="sparkles"></i> Calculate GPA</button>
+            
+            <div style="margin-left: auto; background: rgba(99,102,241,0.2); border: 1px solid var(--primary); padding: 12px 24px; border-radius: var(--radius-md);">
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">CALCULATED GPA:</span>
+              <span id="calculatedGpaValue" style="font-size: 24px; font-weight: 800; color: #ffffff; margin-left: 10px;">8.75 / 10.0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 9: Focus Pomodoro Study Timer -->
+      <section id="tab-timer" class="tab-content">
+        <div class="glass-card" style="text-align: center; padding: 40px 20px;">
+          <span class="badge badge-purple" style="margin-bottom: 16px;">Machan Focus Mode</span>
+          <h2 id="timerDisplay" style="font-size: 72px; font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: -2px; color: #ffffff; margin: 16px 0;">25:00</h2>
+          <p id="timerStatus" style="color: var(--text-muted); margin-bottom: 30px;">Ready for a 25-minute deep study focus session!</p>
+
+          <div style="display: flex; justify-content: center; gap: 16px;">
+            <button class="btn btn-primary" id="timerStartBtn" onclick="toggleTimer()"><i data-lucide="play"></i> Start Focus</button>
+            <button class="btn btn-outline" onclick="resetTimer()"><i data-lucide="rotate-ccw"></i> Reset</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-msg">Notification Message</div>
+
+  <!-- 1. Granular Database Modules -->
+  <script src="js/db/madrasUniversity.js"></script>
+  <script src="js/db/annaUniversity.js"></script>
+  <script src="js/db/vtuUniversity.js"></script>
+  <script src="js/db/jntuUniversity.js"></script>
+  <script src="js/db/mumbaiUniversity.js"></script>
+  <script src="js/db/autonomousUniversity.js"></script>
+  <script src="js/db/questionBanks.js"></script>
+  <script src="js/db/sampleSyllabi.js"></script>
+  <script src="js/db/dbRegistry.js"></script>
+
+  <!-- 2. Application Store & Persistence -->
+  <script src="js/store/appStore.js"></script>
+
+  <!-- 3. Service Modules -->
+  <script src="js/services/pdfExport.js"></script>
+  
+  <!-- 4. Modular UI Components -->
+  <script src="js/components/AiAssistant.js"></script>
+  <script src="js/components/YoutubeMatcher.js"></script>
+  <script src="js/components/ExamQuestionBank.js"></script>
+  <script src="js/components/NotesGenerator.js"></script>
+  <script src="js/components/AssignmentCopilot.js"></script>
+  <script src="js/components/ProductivityTools.js"></script>
+  
+  <!-- 5. Central Application Controller -->
+  <script src="js/app.js"></script>
+
+  <script>
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>
