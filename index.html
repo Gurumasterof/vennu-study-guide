@@ -4,8 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vaa Macha Vettiya Irukala! 🎓 - Ultimate Student AI Assistant</title>
-  <meta name="description" content="Ultra-modularized AI-powered student assistant app for University of Madras, Anna University, VTU, JNTU & Exam Question Banks with PDF downloads.">
+  <meta name="description" content="Downloadable AI-powered student assistant app for University of Madras, Anna University, VTU, JNTU & Exam Question Banks with PDF downloads.">
   
+  <!-- PWA Web App Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vaa Macha">
+
   <!-- CSS Stylesheet -->
   <link rel="stylesheet" href="style.css">
   
@@ -25,7 +32,7 @@
         <div class="brand-logo">🚀</div>
         <div class="brand-info">
           <h1>Vaa Macha Vettiya Irukala!</h1>
-          <span>Student AI Companion (UNOM Special)</span>
+          <span>Student AI Companion (PWA Ready)</span>
         </div>
       </div>
 
@@ -79,6 +86,11 @@
         </div>
 
         <div class="header-controls">
+          <!-- PWA Install Button -->
+          <button id="pwaInstallBtn" class="btn btn-emerald" style="padding: 8px 16px; font-size: 13px; display: none;" onclick="triggerPwaInstall()">
+            <i data-lucide="download-cloud"></i> Install App
+          </button>
+
           <div class="college-selector-pill">
             <i data-lucide="building"></i>
             <select id="universitySelect" onchange="onUniversityChange()">
@@ -101,19 +113,26 @@
             <div class="card-title">
               <i data-lucide="bot" style="color: var(--primary);"></i> Machan AI Interactive Assistant
             </div>
-            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
               Tell Machan your college hours, sleep timings, and today's goals. Machan will build a custom study routine!
             </p>
+
+            <!-- Quick Suggestion Chips -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+              <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="window.AiAssistantComponent.sendChatMessage('📅 Build today\'s study plan for college 8:30 to 2:00 PM')">📅 Build Today's Study Plan</button>
+              <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="window.AiAssistantComponent.sendChatMessage('🎯 I need 2 hours study plan for Madras Univ C++ Exam')">🎯 2 Hrs Exam Study Plan</button>
+              <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="window.AiAssistantComponent.sendChatMessage('☕ Recommend evening chill & revision schedule')">☕ Evening Chill Schedule</button>
+            </div>
 
             <div class="chat-container">
               <div class="chat-messages" id="chatMessages">
                 <div class="message-bubble assistant">
-                  Vannakam Macha! 👋 Madras University & college exam stress-ah? <br><br>
+                  Vannakam Macha! 👋 Enna macha vettiya irukala? Illa Madras Univ exam stress-ah? <br><br>
                   Sollu, iniku unaku college hours enna? Kitathata evlo time padika venum? Na unaku exact timetable pottu tharen!
                 </div>
               </div>
               <div class="chat-input-bar">
-                <input type="text" id="chatInput" class="form-control" placeholder="e.g., Madras Univ B.Sc CS, College 8:30 to 2:00 PM, need 2 hrs study..." onkeypress="handleChatKeyPress(event)">
+                <input type="text" id="chatInput" class="form-control" placeholder="e.g., College 8:30 to 2:00 PM, need 2 hrs study..." onkeypress="handleChatKeyPress(event)">
                 <button class="btn btn-primary" onclick="sendChatMessage()"><i data-lucide="send"></i></button>
               </div>
             </div>
@@ -431,6 +450,39 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="toast-msg">Notification Message</div>
+
+  <!-- Service Worker & PWA Registration -->
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('pwaInstallBtn');
+      if (btn) btn.style.display = 'inline-flex';
+    });
+
+    function triggerPwaInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            window.showToast("📲 App installing on your device!");
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          console.log('PWA ServiceWorker registered:', reg.scope);
+        }).catch((err) => {
+          console.log('PWA ServiceWorker registration failed:', err);
+        });
+      });
+    }
+  </script>
 
   <!-- 1. Granular Database Modules -->
   <script src="js/db/madrasUniversity.js"></script>
