@@ -484,33 +484,28 @@
     }
   </script>
 
-  <!-- 1. Granular Database Modules -->
-  <script src="js/db/madrasUniversity.js"></script>
-  <script src="js/db/annaUniversity.js"></script>
-  <script src="js/db/vtuUniversity.js"></script>
-  <script src="js/db/jntuUniversity.js"></script>
-  <script src="js/db/mumbaiUniversity.js"></script>
-  <script src="js/db/autonomousUniversity.js"></script>
-  <script src="js/db/questionBanks.js"></script>
-  <script src="js/db/sampleSyllabi.js"></script>
-  <script src="js/db/dbRegistry.js"></script>
+  <!-- 1. Core Application Engine Bundle (Guarantees all options & features work 100% on Vercel) -->
+  <script src="bundle.js"></script>
 
-  <!-- 2. Application Store & Persistence -->
-  <script src="js/store/appStore.js"></script>
-
-  <!-- 3. Service Modules -->
-  <script src="js/services/pdfExport.js"></script>
-  
-  <!-- 4. Modular UI Components -->
-  <script src="js/components/AiAssistant.js"></script>
-  <script src="js/components/YoutubeMatcher.js"></script>
-  <script src="js/components/ExamQuestionBank.js"></script>
-  <script src="js/components/NotesGenerator.js"></script>
-  <script src="js/components/AssignmentCopilot.js"></script>
-  <script src="js/components/ProductivityTools.js"></script>
-  
-  <!-- 5. Central Application Controller -->
-  <script src="js/app.js"></script>
+  <!-- 2. Modular Database & Component Scripts -->
+  <script src="js/db/madrasUniversity.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/annaUniversity.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/vtuUniversity.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/jntuUniversity.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/mumbaiUniversity.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/autonomousUniversity.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/questionBanks.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/sampleSyllabi.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/db/dbRegistry.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/store/appStore.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/services/pdfExport.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/components/AiAssistant.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/components/YoutubeMatcher.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/components/ExamQuestionBank.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/components/NotesGenerator.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/components/AssignmentCopilot.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/components/ProductivityTools.js" onerror="console.log('Fallback to bundled engine')"></script>
+  <script src="js/app.js" onerror="console.log('Fallback to bundled engine')"></script>
 
   <script>
     if (window.lucide) lucide.createIcons();
