@@ -21,6 +21,9 @@
   
   <!-- html2pdf for Client-side PDF Generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Supabase JS Client CDN for Cloud Database Sync -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -86,6 +89,15 @@
         </div>
 
         <div class="header-controls">
+          <!-- Student User Profile & ID Badge -->
+          <div class="user-profile-pill" id="userProfileBadge" onclick="openUserProfileModal()">
+            <i data-lucide="user-check" style="color: var(--accent-cyan);"></i>
+            <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2;">
+              <span id="badgeUserName" style="font-weight: 700; color: #ffffff; font-size: 13px;">Student Profile</span>
+              <span id="badgeUserId" style="font-size: 11px; color: var(--accent-cyan);">🆔 Create User ID</span>
+            </div>
+          </div>
+
           <!-- PWA Install Button -->
           <button id="pwaInstallBtn" class="btn btn-emerald" style="padding: 8px 16px; font-size: 13px; display: none;" onclick="triggerPwaInstall()">
             <i data-lucide="download-cloud"></i> Install App
@@ -446,6 +458,78 @@
       </section>
 
     </main>
+  </div>
+
+  <!-- Student User Profile & ID Registration Modal -->
+  <div id="userProfileModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🎓 Student User Profile & ID Creation</h3>
+        <button class="modal-close" onclick="closeUserProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Student Full Name</label>
+          <input type="text" id="regStudentName" class="form-control" placeholder="e.g. Vennu / Machan">
+        </div>
+        <div class="form-group">
+          <label>Student User ID (Custom ID or University Reg No)</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="regStudentId" class="form-control" placeholder="e.g. UNOM-2026-VENNU">
+            <button class="btn btn-outline" onclick="generateAutoUserId()" style="white-space: nowrap;"><i data-lucide="sparkles"></i> Auto ID</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>University</label>
+            <select id="regUniversity" class="form-control">
+              <option value="madras_univ" selected>University of Madras (UNOM)</option>
+              <option value="anna_univ">Anna University</option>
+              <option value="vtu">VTU University</option>
+              <option value="jntu">JNTU University</option>
+              <option value="mumbai_univ">Mumbai University</option>
+              <option value="autonomous">Autonomous College</option>
+              <option value="custom">Custom University</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Course / Major</label>
+            <select id="regCourse" class="form-control">
+              <option value="B.Com General">B.Com General (Bachelor of Commerce)</option>
+              <option value="B.Com Accounting & Finance">B.Com Accounting & Finance (A&F)</option>
+              <option value="B.Com Corporate Secretaryship">B.Com Corporate Secretaryship (CS)</option>
+              <option value="B.Com Computer Applications">B.Com Computer Applications (CA)</option>
+              <option value="B.Sc Computer Science">B.Sc Computer Science</option>
+              <option value="BCA">BCA (Computer Applications)</option>
+              <option value="BBA">BBA (Business Admin)</option>
+              <option value="B.E. CSE">B.E. Computer Science & Engg</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Year / Semester</label>
+          <input type="text" id="regYearSem" class="form-control" placeholder="e.g. 2nd Year / Semester 3" value="2nd Year / Semester 3">
+        </div>
+
+        <!-- Supabase Cloud Sync Section -->
+        <hr style="border-color: var(--border-color); margin: 16px 0;">
+        <div style="background: rgba(99,102,241,0.08); border: 1px solid var(--border-glow); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+          <h4 style="font-size: 13px; color: var(--accent-cyan); margin-bottom: 6px;">☁️ Supabase Cloud Sync (Optional)</h4>
+          <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Link free Supabase project to sync User IDs, Timetables & Tasks live across devices.</p>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="text" id="regSupabaseUrl" class="form-control" style="font-size: 12px; padding: 6px 10px;" placeholder="Supabase Project URL (https://xyz.supabase.co)">
+          </div>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="password" id="regSupabaseKey" class="form-control" style="font-size: 12px; padding: 6px 10px;" placeholder="Supabase Anon Key (eyJ...)">
+          </div>
+          <button type="button" class="btn btn-outline" style="width: 100%; font-size: 11px; padding: 6px;" onclick="testSupabaseConnection()">⚡ Connect & Test Supabase Sync</button>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-top: 5px;" onclick="saveUserProfile()">
+          🚀 Save Profile & Activate Student User ID
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notification -->
