@@ -122,29 +122,33 @@
       <section id="tab-assistant" class="tab-content active">
         <div class="grid-2">
           <div class="glass-card">
-            <div class="card-title">
-              <i data-lucide="bot" style="color: var(--primary);"></i> Machan AI Interactive Assistant
+            <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+              <span><i data-lucide="bot" style="color: var(--primary);"></i> Machan Real Academic AI Engine</span>
+              <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="openAiSettingsModal()">⚙️ AI API Key</button>
             </div>
             <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
-              Tell Machan your college hours, sleep timings, and today's goals. Machan will build a custom study routine!
+              Ask ANY question (Auditing, Cost Sheet, C++, Law, Tax, Physics, Maths) for direct, full academic answers in Tamil, Tanglish, or English!
             </p>
 
             <!-- Quick Suggestion Chips -->
             <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
-              <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="window.AiAssistantComponent.sendChatMessage('📅 Build today\'s study plan for college 8:30 to 2:00 PM')">📅 Build Today's Study Plan</button>
-              <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="window.AiAssistantComponent.sendChatMessage('🎯 I need 2 hours study plan for Madras Univ C++ Exam')">🎯 2 Hrs Exam Study Plan</button>
-              <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="window.AiAssistantComponent.sendChatMessage('☕ Recommend evening chill & revision schedule')">☕ Evening Chill Schedule</button>
+              <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" onclick="sendChatMessage('What is Auditing?')">💡 What is Auditing?</button>
+              <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" onclick="sendChatMessage('Explain Cost Sheet & EOQ formula')">📊 Cost Sheet & EOQ</button>
+              <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" onclick="sendChatMessage('Explain C++ Virtual Functions & OOPs')">💻 C++ OOPs</button>
+              <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" onclick="sendChatMessage('Explain Indian Contract Act Section 10')">⚖️ Contract Act Sec 10</button>
+              <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" onclick="sendChatMessage('What are the 5 Heads of Income Tax?')">🏛️ Income Tax 5 Heads</button>
+              <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" onclick="sendChatMessage('📅 Build today\'s study plan for college 8:30 to 2:00 PM')">📅 Study Routine Plan</button>
             </div>
 
             <div class="chat-container">
               <div class="chat-messages" id="chatMessages">
                 <div class="message-bubble assistant">
                   Vannakam Macha! 👋 Enna macha vettiya irukala? Illa Madras Univ exam stress-ah? <br><br>
-                  Sollu, iniku unaku college hours enna? Kitathata evlo time padika venum? Na unaku exact timetable pottu tharen!
+                  Sollu, unaku எந்த பாடத்துல / subject-la doubt irukono kelungaa (Auditing, Cost Accounting, C++, Law, Tax, Physics, Maths)! Full answer direct-ah tharen! 🚀
                 </div>
               </div>
               <div class="chat-input-bar">
-                <input type="text" id="chatInput" class="form-control" placeholder="e.g., College 8:30 to 2:00 PM, need 2 hrs study..." onkeypress="handleChatKeyPress(event)">
+                <input type="text" id="chatInput" class="form-control" placeholder="Ask any question (e.g., What is Auditing?)..." onkeypress="handleChatKeyPress(event)">
                 <button class="btn btn-primary" onclick="sendChatMessage()"><i data-lucide="send"></i></button>
               </div>
             </div>
